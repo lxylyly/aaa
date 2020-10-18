@@ -11,6 +11,7 @@ public class HelloController {
     @PreAuthorize("hasAuthority('add')")//表示用户必须拥有add权限才能调用当前方法
     public String add(){
         System.out.println("add...");
+        System.out.println("sssss");
         return null;
     }
 
