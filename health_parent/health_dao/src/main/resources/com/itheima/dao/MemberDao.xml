@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.itheima.dao.MemberDao">
+
+    <select id="isMember" resultType="com.itheima.pojo.Member">
+        select * from t_member where phoneNumber=#{telephone}
+    </select>
+
+    <insert id="addMember">
+        <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into t_member(fileNumber,name,sex,idCard,phoneNumber,regTime,password,email,birthday,remark)
+        values(#{fileNumber},#{name},#{sex},#{idCard},#{phoneNumber},#{regTime},#{password},#{email},#{birthday},#{remark})
+    </insert>
+
+    <select id="findMemberBayMonths" resultType="int">
+        select count(*) from t_member where regTime &lt;= #{regTime}
+    </select>
+
+    <select id="todayNewMember" resultType="int">
+         select count(*) from t_member where regTime = #{value}
+    </select>
+</mapper>
+        <!--/*select count(*) from t_member wehre regTime=#{value}*/-->

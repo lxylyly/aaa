@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:security="http://www.springframework.org/schema/security"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                  http://www.springframework.org/schema/beans/spring-beans.xsd
+                  http://www.springframework.org/schema/mvc
+                  http://www.springframework.org/schema/mvc/spring-mvc.xsd
+                  http://code.alibabatech.com/schema/dubbo
+                  http://code.alibabatech.com/schema/dubbo/dubbo.xsd
+                  http://www.springframework.org/schema/context
+                  http://www.springframework.org/schema/context/spring-context.xsd
+                          http://www.springframework.org/schema/security
+                          http://www.springframework.org/schema/security/spring-security.xsd">
+
+    <!--设置放行资源-->
+    <security:http security="none" pattern="/css/**"></security:http>
+    <security:http security="none" pattern="/img/**"></security:http>
+    <security:http security="none" pattern="/js/**"></security:http>
+    <security:http security="none" pattern="/plugins/**"></security:http>
+    <!--放行登录页面-->
+    <security:http security="none" pattern="/login.html"></security:http>
+
+    <!--自动配置登录页面,拦截规则中access是否使用表达式-->
+    <security:http auto-config="true" use-expressions="true">
+        <!--拦截规则--><!--配置多种校验规则-->
+        <security:intercept-url pattern="/a.html" access="isAuthenticated()"/>
+        <security:intercept-url pattern="/b.html" access="hasAuthority('add')"/>
+        <security:intercept-url pattern="/c.html" access="hasRole('ADMIN')"/>
+        <security:intercept-url pattern="/d.html" access="hasRole('ABC')"/>
+        <security:intercept-url pattern="/**" access="hasRole('ROLE_ADMIN')"/>
+        <!--配置登陆页面login.html-->
+        <!--请求方法,请求页面,账号,密码,成功后跳转的页面,失败后跳转到额页面-->
+        <security:form-login login-page="/login.html"
+                             username-parameter="username"
+                             password-parameter="password"
+                             login-processing-url="/login.do"
+                             default-target-url="/pages/main.html"
+                             authentication-failure-url="/login.html"
+        />
+        <!--禁用csrf-->
+        <security:csrf disabled="true"></security:csrf>
+        <!--退出登录-->
+        <security:logout logout-url="/logout.do"
+                         logout-success-url="/login.html" invalidate-session="true"/>
+    </security:http>
+
+    <!--认证管理器, 定义登录账号密码,并授予访问的角色,权限-->
+    <security:authentication-manager>
+        <!--认证执行者-->
+        <security:authentication-provider user-service-ref="userService">
+            <!--配置加密方式-->
+            <security:password-encoder ref="passwordEncoder"></security:password-encoder>
+        </security:authentication-provider>
+    </security:authentication-manager>
+
+    <!--配置密码加密对象bctry-->    <!--加密-->
+    <bean id="passwordEncoder"
+          class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
+    <!--开启注解包扫描-->
+    <context:component-scan base-package="com.itheima"/>
+    <!--开启注解方式权限控制-->
+    <security:global-method-security pre-post-annotations="enabled"></security:global-method-security>
+
+
+</beans>

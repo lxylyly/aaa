@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.itheima.dao.OrderSettingDao">
+<select id="upload_findDate" resultType="int">
+    select count(*) from t_ordersetting where orderDate=#{orderDate}
+</select>
+
+    <update id="upload_update">
+        update t_ordersetting set orderDate=#{orderDate} where orderDate=#{orderDate}
+    </update>
+
+    <insert id="upload_add">
+        insert into t_ordersetting(orderDate,number,reservations) values(#{orderDate},#{number},#{reservations})
+    </insert>
+
+    <select id="findAll" resultType="com.itheima.pojo.OrderSetting">
+        select * from t_ordersetting where orderDate between #{startMonth} and #{endMonth}
+    </select>
+
+    <select id="findById" resultType="com.itheima.pojo.OrderSetting">
+        select * from t_ordersetting where orderDate=#{orderDate}
+    </select>
+
+    <update id="editNumberByDate_update">
+        update t_ordersetting set number=#{number} where orderDate=#{orderDate}
+    </update>
+
+    <insert id="editNumberByDate_add">
+        insert into t_ordersetting(orderDate,number) values(#{orderDate},#{number})
+    </insert>
+
+    <select id="date" resultType="com.itheima.pojo.OrderSetting">
+        select * from t_ordersetting where orderDate=#{orderDate}
+    </select>
+
+    <update id="orderSettingUpdate">
+        update t_ordersetting set reservations=#{reservations} where id=#{id}
+    </update>
+
+</mapper>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                  http://www.springframework.org/schema/beans/spring-beans.xsd
+                  http://www.springframework.org/schema/context
+                  http://www.springframework.org/schema/context/spring-context.xsd">
+    <!--写这个配置文件的原因-->
+    <!--开启事务注解包扫描-->
+<!--注册自定义事务类到xml,定义一个容器存放事务类,指向这个类及类中的方法,定义触发器(指定触发时间),定义工厂-->
+    <context:component-scan base-package="com.itheima"></context:component-scan>
+    <!--<bean id="clearImgJob" class="com.itheima.job.ClearImgJob"></bean>-->
+
+    <bean id="jobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="clearImgJob"></property>
+        <property name="targetMethod" value="clearImg"> </property>
+    </bean>
+<bean id="myTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+    <property name="jobDetail" ref="jobDetail"></property>
+    <property name="cronExpression"><value>0/10 * * ? * * </value></property>
+</bean>
+<bean id="scheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+    <property name="triggers">
+        <list>
+            <ref bean="myTrigger"></ref>
+        </list>
+    </property>
+</bean>
+
+</beans>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://java.sun.com/xml/ns/javaee"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+         http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+         id="WebApp_ID" version="3.0">
+  <display-name>Archetype Created Web Application</display-name>
+<!--加载spring容器,使用监听器-->
+  <context-param>
+    <param-name>contextConfigLocation</param-name>
+    <!--表示加载所有的applicationContext开头的.xml文件,如果这里没有加载所有,
+    只加载了applicationContext-service.xml的话,就需要在applicationContext-service.xml文件中import导入别的xml文件-->
+    <param-value>classpath*:applicationContext*.xml</param-value>
+  </context-param>
+  <listener>
+    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+  </listener>
+
+</web-app>
